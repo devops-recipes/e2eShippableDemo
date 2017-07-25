@@ -8,7 +8,7 @@ resources:
       - e2eShippableDemo
     integration: "ttrahan-gh"
     pointer:
-      sourcename: "ttrahan/e2eshippabledemo"
+      sourcename: "ttrahan/e2eShippableDemo"
       branch: master
 
 
