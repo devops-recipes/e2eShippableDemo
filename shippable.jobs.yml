@@ -41,7 +41,7 @@ jobs:
     steps:
       - IN: e2eshipdemo-release-ecs-beta
       - IN: e2eshipdemo-params-ecs-test
-      - IN: e2eshipdemo-cluster-ecs
+      - IN: e2eshipdemo-cluster-ecs-test
       - IN: e2eshipdemo-alb-test
         applyTo:
           - manifest: e2eshipdemo-manifest-ecs
@@ -74,7 +74,7 @@ jobs:
       - IN: e2eshipdemo-params-ecs-prod
       - IN: e2eshipdemo-img-options-ecs-prod
       - IN: e2eshipdemo-replicas-ecs-prod
-      - IN: e2eshipdemo-cluster-ecs
+      - IN: e2eshipdemo-cluster-ecs-prod
       - IN: e2eshipdemo-alb-prod
         applyTo:
           - manifest: e2eshipdemo-manifest-ecs
