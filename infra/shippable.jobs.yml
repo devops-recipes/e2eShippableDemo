@@ -14,7 +14,8 @@ jobs:
      - TASK:
        - script: sudo apt-get install -y jq
        - script: IN/auto_repo/gitRepo/infra/provisionAWS.sh awsSetupIAM
-     - OUT: echo versionName=$JOB.NUMBER > /build/state/e2eshipdemo-cluster-ecs-test.env
+       - script: echo versionName=$JOB.NUMBER > /build/state/e2eshipdemo-cluster-ecs-test.env
+     - OUT: e2eshipdemo-cluster-ecs-test
    on_success:
      - script: echo "SUCCESS"
    on_failure:
