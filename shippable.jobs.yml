@@ -7,77 +7,77 @@ jobs:
 # runCI job that builds and pushes artifact to Amazon ECR
   - name: e2eShippableDemo_runCI
     type: runCI
-    steps:
-      - OUT: shipdemo-img-ecs
     flags:
-      - amazon-ecr-ecs-loadbalancer
+      - e2eShippableDemo
+    steps:
+      - OUT: e2eshipdemo-img-ecs
   
 # generate manifest
-  - name: shipdemo-manifest-ecs
+  - name: e2eshipdemo-manifest-ecs
     type: manifest
-    steps:
-      - IN: shipdemo-img-ecs
-      - IN: shipdemo-img-options-ecs-test
-      - TASK: managed
     flags:
-      - amazon-ecr-ecs-loadbalancer
+      - e2eShippableDemo
+    steps:
+      - IN: e2eshipdemo-img-ecs
+      - IN: e2eshipdemo-img-options-ecs-test
+      - TASK: managed
 
 # Create TEST Release
-  - name: shipdemo-release-ecs-beta
+  - name: e2eshipdemo-release-ecs-beta
     type: release
+    flags:
+      - e2eShippableDemo
     steps:
-      - IN: shipdemo-manifest-ecs
-      - IN: shipdemo-version-ecs
+      - IN: e2eshipdemo-manifest-ecs
+      - IN: e2eshipdemo-version-ecs
       - TASK: managed
         bump: beta
-    flags:
-      - amazon-ecr-ecs-loadbalancer
 
 # TEST deployment to Amazon ECS
-  - name: shipdemo-deploy-ecs-test
+  - name: e2eshipdemo-deploy-ecs-test
     type: deploy
+    flags:
+      - e2eShippableDemo
     steps:
-      - IN: shipdemo-release-ecs-beta
-      - IN: shipdemo-params-ecs-test
-      - IN: shipdemo-cluster-ecs
-      - IN: shipdemo-alb-test
+      - IN: e2eshipdemo-release-ecs-beta
+      - IN: e2eshipdemo-params-ecs-test
+      - IN: e2eshipdemo-cluster-ecs
+      - IN: e2eshipdemo-alb-test
         applyTo:
-          - manifest: shipdemo-manifest-ecs
-            image: shipdemo-img-ecs
+          - manifest: e2eshipdemo-manifest-ecs
+            image: e2eshipdemo-img-ecs
             port: 80
       - TASK: managed
-    flags:
-      - amazon-ecr-ecs-loadbalancer
 
 # Create PROD Release
-  - name: shipdemo-release-ecs-prod
+  - name: e2eshipdemo-release-ecs-prod
     type: release
+    flags:
+      - e2eShippableDemo
     steps:
-      - IN: shipdemo-deploy-ecs-test
+      - IN: e2eshipdemo-deploy-ecs-test
         switch: off
-      # - IN: shipdemo-version-ecs
+      # - IN: e2eshipdemo-version-ecs
       - TASK: managed
         bump: final
-    flags:
-      - amazon-ecr-ecs-loadbalancer
 
 # PROD deployment to Amazon ECS
-  - name: shipdemo-deploy-ecs-prod
+  - name: e2eshipdemo-deploy-ecs-prod
     type: deploy
+    flags:
+      - e2eShippableDemo
     steps:
-      # - IN: shipdemo-deploy-ecs-test
+      # - IN: e2eshipdemo-deploy-ecs-test
       #   switch: off
-      - IN: shipdemo-release-ecs-prod
+      - IN: e2eshipdemo-release-ecs-prod
         switch: off
-      - IN: shipdemo-params-ecs-prod
-      - IN: shipdemo-img-options-ecs-prod
-      - IN: shipdemo-replicas-ecs-prod
-      - IN: shipdemo-cluster-ecs
-      - IN: shipdemo-alb-prod
+      - IN: e2eshipdemo-params-ecs-prod
+      - IN: e2eshipdemo-img-options-ecs-prod
+      - IN: e2eshipdemo-replicas-ecs-prod
+      - IN: e2eshipdemo-cluster-ecs
+      - IN: e2eshipdemo-alb-prod
         applyTo:
-          - manifest: shipdemo-manifest-ecs
-            image: shipdemo-img-ecs
+          - manifest: e2eshipdemo-manifest-ecs
+            image: e2eshipdemo-img-ecs
             port: 80
       - TASK: managed
-    flags:
-      - amazon-ecr-ecs-loadbalancer

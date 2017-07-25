@@ -5,7 +5,7 @@ resources:
 ################################
 
 # add env - AWS cluster
-  - name: shipdemo-cluster-ecs
+  - name: e2eshipdemo-cluster-ecs
     type: cluster
     flags:
       - e2eShippableDemo
@@ -16,7 +16,7 @@ resources:
       region: "us-east-1"
 
 # add AWS ALB target group for TEST
-  - name: shipdemo-alb-test     #required
+  - name: e2eshipdemo-alb-test     #required
     type: loadBalancer      #required
     flags:
       - e2eShippableDemo
@@ -26,7 +26,7 @@ resources:
       method: application
 
 # add AWS ALB target group for PROD
-  - name: shipdemo-alb-prod     #required
+  - name: e2eshipdemo-alb-prod     #required
     type: loadBalancer      #required
     flags:
       - e2eShippableDemo
@@ -38,7 +38,7 @@ resources:
 ################################
 
 # Docker Image
-  - name: shipdemo-img-ecs
+  - name: e2eshipdemo-img-ecs
     type: image
     flags:
       - e2eShippableDemo
@@ -57,7 +57,7 @@ resources:
 # TEST resources
 
 # Docker Image Options
-  - name: shipdemo-img-options-ecs-test
+  - name: e2eshipdemo-img-options-ecs-test
     type: dockerOptions
     flags:
       - e2eShippableDemo
@@ -67,13 +67,13 @@ resources:
       portMappings:
         - 0:80
       labels:   
-        app: shipdemo-e2eShippableDemo
+        app: e2eshipdemo-e2eShippableDemo
         env: test
     flags:
       - amazon-ecr-ecs-loadbalancer
 
 # env vars for Test
-  - name: shipdemo-params-ecs-test
+  - name: e2eshipdemo-params-ecs-test
     type: params
     flags:
       - e2eShippableDemo
@@ -87,7 +87,7 @@ resources:
 ################################
 
 # set service version seed
-  - name: shipdemo-version-ecs
+  - name: e2eshipdemo-version-ecs
     type: version
     flags:
       - e2eShippableDemo
@@ -101,7 +101,7 @@ resources:
 # PROD resources
 
 # Docker Image Options
-  - name: shipdemo-img-options-ecs-prod
+  - name: e2eshipdemo-img-options-ecs-prod
     type: dockerOptions
     flags:
       - e2eShippableDemo
@@ -111,13 +111,13 @@ resources:
       portMappings:
         - 0:80
       labels: 
-        app: shipdemo-e2eShippableDemo
+        app: e2eshipdemo-e2eShippableDemo
         env: prod
     flags:
       - amazon-ecr-ecs-loadbalancer
 
 # env vars for Prod
-  - name: shipdemo-params-ecs-prod
+  - name: e2eshipdemo-params-ecs-prod
     type: params
     flags:
       - e2eShippableDemo
@@ -129,7 +129,7 @@ resources:
       - amazon-ecr-ecs-loadbalancer
 
 # PROD replicas
-  - name: shipdemo-replicas-ecs-prod
+  - name: e2eshipdemo-replicas-ecs-prod
     type: replicas
     flags:
       - e2eShippableDemo

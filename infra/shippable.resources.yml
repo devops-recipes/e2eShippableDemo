@@ -4,6 +4,8 @@ resources:
 # REPO for all automation
   - name: auto_repo
     type: gitrepo
+    flags:
+      - e2eShippableDemo
     integration: "ttrahan-gh"
     pointer:
       sourcename: "ttrahan/e2eshippabledemo"
@@ -14,11 +16,15 @@ resources:
 # AWS credentials
   - name: aws_creds
     type: integration
+    flags:
+      - e2eShippableDemo
     integration: "ttrahan-aws"
 
 # Parameters to provision AMI Builder
   - name: bldami_params
     type: params
+    flags:
+      - e2eShippableDemo
     version:
       params:
         SOURCE_AMI: "ami-c8580bdf" #ecs optimized AMI
@@ -32,6 +38,8 @@ resources:
 # AWS pem key
   - name: aws_pem
     type: integration
+    flags:
+      - e2eShippableDemo
     integration: "dr-keypair-us-east"
 
 
