@@ -45,7 +45,7 @@ resources:
     integration: ttrahan-ecr # replace with your Amazon ECR integration name
     pointer:
       # replace with your Amazon ECR URL
-      sourceName: "288971733297.dkr.ecr.us-east-1.amazonaws.com/e2eShippableDemo" 
+      sourceName: "288971733297.dkr.ecr.us-east-1.amazonaws.com/e2eshippabledemo" 
       isPull: false
     seed:
       versionName: master.1
@@ -65,7 +65,7 @@ resources:
       portMappings:
         - 0:80
       labels:   
-        app: e2eshipdemo-e2eShippableDemo
+        app: e2eshippabledemo
         env: test
 
 # env vars for Test
@@ -103,7 +103,7 @@ resources:
       portMappings:
         - 0:80
       labels: 
-        app: e2eshipdemo-e2eShippableDemo
+        app: e2eshippabledemo
         env: prod
 
 # env vars for Prod
