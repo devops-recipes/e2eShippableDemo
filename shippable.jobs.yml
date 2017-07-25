@@ -1,0 +1,83 @@
+jobs:
+
+# jobs for this shippableSamples demo 
+
+################################
+
+# runCI job that builds and pushes artifact to Amazon ECR
+  - name: node-ecr-deploy-ecs-loadbalancer_runCI
+    type: runCI
+    steps:
+      - OUT: shipdemo-img-ecs
+    flags:
+      - amazon-ecr-ecs-loadbalancer
+  
+# generate manifest
+  - name: shipdemo-manifest-ecs
+    type: manifest
+    steps:
+      - IN: shipdemo-img-ecs
+      - IN: shipdemo-img-options-ecs-test
+      - TASK: managed
+    flags:
+      - amazon-ecr-ecs-loadbalancer
+
+# Create TEST Release
+  - name: shipdemo-release-ecs-beta
+    type: release
+    steps:
+      - IN: shipdemo-manifest-ecs
+      - IN: shipdemo-version-ecs
+      - TASK: managed
+        bump: beta
+    flags:
+      - amazon-ecr-ecs-loadbalancer
+
+# TEST deployment to Amazon ECS
+  - name: shipdemo-deploy-ecs-test
+    type: deploy
+    steps:
+      - IN: shipdemo-release-ecs-beta
+      - IN: shipdemo-params-ecs-test
+      - IN: shipdemo-cluster-ecs
+      - IN: shipdemo-alb-test
+        applyTo:
+          - manifest: shipdemo-manifest-ecs
+            image: shipdemo-img-ecs
+            port: 80
+      - TASK: managed
+    flags:
+      - amazon-ecr-ecs-loadbalancer
+
+# Create PROD Release
+  - name: shipdemo-release-ecs-prod
+    type: release
+    steps:
+      - IN: shipdemo-deploy-ecs-test
+        switch: off
+      # - IN: shipdemo-version-ecs
+      - TASK: managed
+        bump: final
+    flags:
+      - amazon-ecr-ecs-loadbalancer
+
+# PROD deployment to Amazon ECS
+  - name: shipdemo-deploy-ecs-prod
+    type: deploy
+    steps:
+      # - IN: shipdemo-deploy-ecs-test
+      #   switch: off
+      - IN: shipdemo-release-ecs-prod
+        switch: off
+      - IN: shipdemo-params-ecs-prod
+      - IN: shipdemo-img-options-ecs-prod
+      - IN: shipdemo-replicas-ecs-prod
+      - IN: shipdemo-cluster-ecs
+      - IN: shipdemo-alb-prod
+        applyTo:
+          - manifest: shipdemo-manifest-ecs
+            image: shipdemo-img-ecs
+            port: 80
+      - TASK: managed
+    flags:
+      - amazon-ecr-ecs-loadbalancer

@@ -1,0 +1,19 @@
+resources:
+
+############################### WAR SIT RESOURCES #########################
+## REPO of SIT code
+#  - name: sit_repo
+#    type: gitRepo
+#    integration: "demo-gh"
+#    pointer:
+#      sourceName: "ttrahan/node-ecr-ecs-loadbalancer"
+#      branch: master
+#
+## SIT env vars
+#  - name: sit_params
+#    type: params
+#    version:
+#      params:
+#        API_URL: "54.158.18.50:8080"
+#        API_TOKEN: "NA"
+
