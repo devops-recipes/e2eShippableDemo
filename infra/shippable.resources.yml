@@ -27,11 +27,9 @@ resources:
       - e2eShippableDemo
     version:
       params:
-        SOURCE_AMI: "ami-c8580bdf" #ecs optimized AMI
-        VPC_ID: "vpc-1032db76"
-        # SUBNET_ID: "subnet-1c0cda20"
+        SOURCE_AMI: "ami-04351e12" #ecs optimized AMI
+        VPC_ID: "vpc-400a5927"
         SUBNET_ID: "subnet-84ea36cd"
-        # SECURITY_GROUP_ID: "sg-d1c671ac"
         SECURITY_GROUP_ID: "sg-4f9e0135"
         REGION: "us-east-1"
 
