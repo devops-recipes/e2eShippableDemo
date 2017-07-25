@@ -49,8 +49,6 @@ resources:
       isPull: false
     seed:
       versionName: master.1
-    flags:
-      - amazon-ecr-ecs-loadbalancer
 
 ################################
 
@@ -69,8 +67,6 @@ resources:
       labels:   
         app: e2eshipdemo-e2eShippableDemo
         env: test
-    flags:
-      - amazon-ecr-ecs-loadbalancer
 
 # env vars for Test
   - name: e2eshipdemo-params-ecs-test
@@ -81,8 +77,6 @@ resources:
       params:
         ENVIRONMENT: "TEST"
         PORT: 80
-    flags:
-      - amazon-ecr-ecs-loadbalancer
 
 ################################
 
@@ -93,8 +87,6 @@ resources:
       - e2eShippableDemo
     seed:
       versionName: "1.1.0"
-    flags:
-      - amazon-ecr-ecs-loadbalancer
 
 ################################
 
@@ -113,8 +105,6 @@ resources:
       labels: 
         app: e2eshipdemo-e2eShippableDemo
         env: prod
-    flags:
-      - amazon-ecr-ecs-loadbalancer
 
 # env vars for Prod
   - name: e2eshipdemo-params-ecs-prod
@@ -125,8 +115,6 @@ resources:
       params:
         ENVIRONMENT: "PROD"
         PORT: 80
-    flags:
-      - amazon-ecr-ecs-loadbalancer
 
 # PROD replicas
   - name: e2eshipdemo-replicas-ecs-prod
@@ -135,7 +123,5 @@ resources:
       - e2eShippableDemo
     version:
       count: 2
-    flags:
-      - amazon-ecr-ecs-loadbalancer
 
 # ################################
