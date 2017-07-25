@@ -5,14 +5,25 @@ resources:
 ################################
 
 # add env - AWS cluster
-  - name: e2eshipdemo-cluster-ecs
+  - name: e2eshipdemo-cluster-ecs-test
     type: cluster
     flags:
       - e2eShippableDemo
     integration: ttrahan-aws # replace with your AWS integration name
     pointer:
       # replace with your Amazon ECS cluster name and region
-      sourceName : "demo-shippable-ecs-test"
+      sourceName : "test-aws"
+      region: "us-east-1"
+
+# add env - AWS cluster
+  - name: e2eshipdemo-cluster-ecs-prod
+    type: cluster
+    flags:
+      - e2eShippableDemo
+    integration: ttrahan-aws # replace with your AWS integration name
+    pointer:
+      # replace with your Amazon ECS cluster name and region
+      sourceName : "prod-aws"
       region: "us-east-1"
 
 # add AWS ALB target group for TEST
