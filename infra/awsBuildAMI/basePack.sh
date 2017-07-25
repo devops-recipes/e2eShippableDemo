@@ -1,6 +1,6 @@
 #!/bin/bash -e
 
-export PK_INSALL_LOCATION=/opt
+export PK_INSTALL_LOCATION=/opt
 export PK_VERSION=1.0.3
 export PK_FILENAME=packer_"$PK_VERSION"_linux_amd64.zip
 export RES_AWS_CREDS="aws_creds"
@@ -44,17 +44,17 @@ setup_params(){
 }
 
 install_packer() {
-  pushd $PK_INSALL_LOCATION
+  pushd $PK_INSTALL_LOCATION
   echo "Fetching packer"
   echo "-----------------------------------"
 
-  rm -rf $PK_INSALL_LOCATION/packer
-  mkdir -p $PK_INSALL_LOCATION/packer
+  rm -rf $PK_INSTALL_LOCATION/packer
+  mkdir -p $PK_INSTALL_LOCATION/packer
 
   wget -q https://releases.hashicorp.com/packer/$PK_VERSION/"$PK_FILENAME"
   apt-get install unzip
-  unzip -o $PK_FILENAME -d $PK_INSALL_LOCATION/packer
-  export PATH=$PATH:$PK_INSALL_LOCATION/packer
+  unzip -o $PK_FILENAME -d $PK_INSTALL_LOCATION/packer
+  export PATH=$PATH:$PK_INSTALL_LOCATION/packer
   echo "downloaded packer successfully"
   echo "-----------------------------------"
 

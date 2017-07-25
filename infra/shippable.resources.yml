@@ -38,6 +38,6 @@ resources:
     type: integration
     flags:
       - e2eShippableDemo
-    integration: "dr-keypair-us-east"
+    integration: "kp-us-east-1"
 
 
