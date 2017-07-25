@@ -5,7 +5,7 @@ jobs:
 ################################
 
 # runCI job that builds and pushes artifact to Amazon ECR
-  - name: node-ecr-deploy-ecs-loadbalancer_runCI
+  - name: e2eShippableDemo_runCI
     type: runCI
     steps:
       - OUT: shipdemo-img-ecs

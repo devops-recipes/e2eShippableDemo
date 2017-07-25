@@ -7,6 +7,8 @@ resources:
 # add env - AWS cluster
   - name: shipdemo-cluster-ecs
     type: cluster
+    flags:
+      - e2eShippableDemo
     integration: ttrahan-aws # replace with your AWS integration name
     pointer:
       # replace with your Amazon ECS cluster name and region
@@ -16,6 +18,8 @@ resources:
 # add AWS ALB target group for TEST
   - name: shipdemo-alb-test     #required
     type: loadBalancer      #required
+    flags:
+      - e2eShippableDemo
     pointer:
       # replace with the ARN for your Amazon EC/2 Application Load Balancer Target Group
       sourceName: "arn:aws:elasticloadbalancing:us-east-1:288971733297:targetgroup/demoWebTest/56a74253de7101ee"
@@ -24,6 +28,8 @@ resources:
 # add AWS ALB target group for PROD
   - name: shipdemo-alb-prod     #required
     type: loadBalancer      #required
+    flags:
+      - e2eShippableDemo
     pointer:
       # replace with the ARN for your Amazon EC/2 Application Load Balancer Target Group
       sourceName: "arn:aws:elasticloadbalancing:us-east-1:288971733297:targetgroup/demoWeb/29435cb0f31ac400"
@@ -34,10 +40,12 @@ resources:
 # Docker Image
   - name: shipdemo-img-ecs
     type: image
+    flags:
+      - e2eShippableDemo
     integration: ttrahan-ecr # replace with your Amazon ECR integration name
     pointer:
       # replace with your Amazon ECR URL
-      sourceName: "288971733297.dkr.ecr.us-east-1.amazonaws.com/node-ecr-deploy-ecs-loadbalancer" 
+      sourceName: "288971733297.dkr.ecr.us-east-1.amazonaws.com/e2eShippableDemo" 
       isPull: false
     seed:
       versionName: master.1
@@ -51,13 +59,15 @@ resources:
 # Docker Image Options
   - name: shipdemo-img-options-ecs-test
     type: dockerOptions
+    flags:
+      - e2eShippableDemo
     version:
       memory: 64
       cpuShares: 128
       portMappings:
         - 0:80
       labels:   
-        app: shipdemo-node-ecr-deploy-ecs-loadbalancer
+        app: shipdemo-e2eShippableDemo
         env: test
     flags:
       - amazon-ecr-ecs-loadbalancer
@@ -65,6 +75,8 @@ resources:
 # env vars for Test
   - name: shipdemo-params-ecs-test
     type: params
+    flags:
+      - e2eShippableDemo
     version:
       params:
         ENVIRONMENT: "TEST"
@@ -77,6 +89,8 @@ resources:
 # set service version seed
   - name: shipdemo-version-ecs
     type: version
+    flags:
+      - e2eShippableDemo
     seed:
       versionName: "1.1.0"
     flags:
@@ -89,13 +103,15 @@ resources:
 # Docker Image Options
   - name: shipdemo-img-options-ecs-prod
     type: dockerOptions
+    flags:
+      - e2eShippableDemo
     version:
       memory: 64
       cpuShares: 128
       portMappings:
         - 0:80
       labels: 
-        app: shipdemo-node-ecr-deploy-ecs-loadbalancer
+        app: shipdemo-e2eShippableDemo
         env: prod
     flags:
       - amazon-ecr-ecs-loadbalancer
@@ -103,6 +119,8 @@ resources:
 # env vars for Prod
   - name: shipdemo-params-ecs-prod
     type: params
+    flags:
+      - e2eShippableDemo
     version:
       params:
         ENVIRONMENT: "PROD"
@@ -113,6 +131,8 @@ resources:
 # PROD replicas
   - name: shipdemo-replicas-ecs-prod
     type: replicas
+    flags:
+      - e2eShippableDemo
     version:
       count: 2
     flags:

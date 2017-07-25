@@ -2,36 +2,36 @@ resources:
 
 ######################### AUTOMATION AS CODE REPO #########################
 # REPO for all automation
- - name: auto_repo
-   type: gitRepo
-   integration: "ttrahan-gh"
-   pointer:
-     sourceName: "ttrahan/e2eShippableDemo"
-     branch: master
+  - name: auto_repo
+    type: gitrepo
+    integration: "ttrahan-gh"
+    pointer:
+      sourcename: "ttrahan/e2eshippabledemo"
+      branch: master
 
 
 ######################### INFRA AUTOMATION RESOURCES #########################
 # AWS credentials
- - name: aws_creds
-   type: integration
-   integration: "ttrahan-aws"
+  - name: aws_creds
+    type: integration
+    integration: "ttrahan-aws"
 
 # Parameters to provision AMI Builder
- - name: bldami_params
-   type: params
-   version:
-     params:
-       SOURCE_AMI: "ami-c8580bdf" #ecs optimized AMI
-       VPC_ID: "vpc-1032db76"
-       # SUBNET_ID: "subnet-1c0cda20"
-       SUBNET_ID: "subnet-84ea36cd"
-       # SECURITY_GROUP_ID: "sg-d1c671ac"
-       SECURITY_GROUP_ID: "sg-4f9e0135"
-       REGION: "us-east-1"
+  - name: bldami_params
+    type: params
+    version:
+      params:
+        SOURCE_AMI: "ami-c8580bdf" #ecs optimized AMI
+        VPC_ID: "vpc-1032db76"
+        # SUBNET_ID: "subnet-1c0cda20"
+        SUBNET_ID: "subnet-84ea36cd"
+        # SECURITY_GROUP_ID: "sg-d1c671ac"
+        SECURITY_GROUP_ID: "sg-4f9e0135"
+        REGION: "us-east-1"
 
 # AWS pem key
- - name: aws_pem
-   type: integration
-   integration: "dr-keypair-us-east"
+  - name: aws_pem
+    type: integration
+    integration: "dr-keypair-us-east"
 
 
