@@ -3,7 +3,7 @@ resources:
 ######################### AUTOMATION AS CODE REPO #########################
 # REPO for all automation
   - name: auto_repo
-    type: gitrepo
+    type: gitRepo
     flags:
       - e2eShippableDemo
     integration: "ttrahan-gh"
