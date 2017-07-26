@@ -1,58 +1,20 @@
 resources:
 
-# resources for this shippableSamples demo 
+#---------------------------------------------------------------#
+#------------------------------ Dev ----------------------------#
+#---------------------------------------------------------------#
 
-################################
-
-# add env - AWS cluster
-  - name: e2eshipdemo-cluster-ecs-test
-    type: cluster
+# Set app version seed
+  - name: e2eshipdemo-version-ecs
+    type: version
+    seed:
+      versionName: "1.1.0"
     flags:
       - e2eShippableDemo
-    integration: ttrahan-aws # replace with your AWS integration name
-    pointer:
-      # replace with your Amazon ECS cluster name and region
-      sourceName : "test-aws"
-      region: "us-east-1"
-
-# add env - AWS cluster
-  - name: e2eshipdemo-cluster-ecs-prod
-    type: cluster
-    flags:
-      - e2eShippableDemo
-    integration: ttrahan-aws # replace with your AWS integration name
-    pointer:
-      # replace with your Amazon ECS cluster name and region
-      sourceName : "prod-aws"
-      region: "us-east-1"
-
-# add AWS ALB target group for TEST
-  - name: e2eshipdemo-alb-test     #required
-    type: loadBalancer      #required
-    flags:
-      - e2eShippableDemo
-    pointer:
-      # replace with the ARN for your Amazon EC/2 Application Load Balancer Target Group
-      sourceName: "arn:aws:elasticloadbalancing:us-east-1:288971733297:targetgroup/demoWebTest/56a74253de7101ee"
-      method: application
-
-# add AWS ALB target group for PROD
-  - name: e2eshipdemo-alb-prod     #required
-    type: loadBalancer      #required
-    flags:
-      - e2eShippableDemo
-    pointer:
-      # replace with the ARN for your Amazon EC/2 Application Load Balancer Target Group
-      sourceName: "arn:aws:elasticloadbalancing:us-east-1:288971733297:targetgroup/demoWeb/29435cb0f31ac400"
-      method: application
-
-################################
 
 # Docker Image
   - name: e2eshipdemo-img-ecs
     type: image
-    flags:
-      - e2eShippableDemo
     integration: ttrahan-ecr # replace with your Amazon ECR integration name
     pointer:
       # replace with your Amazon ECR URL
@@ -61,15 +23,9 @@ resources:
     seed:
       versionName: master.1
 
-################################
-
-# TEST resources
-
-# Docker Image Options
+# TEST Docker Image Options
   - name: e2eshipdemo-img-options-ecs-test
     type: dockerOptions
-    flags:
-      - e2eShippableDemo
     version:
       memory: 64
       cpuShares: 128
@@ -79,35 +35,17 @@ resources:
         app: e2eshippabledemo
         env: test
 
-# env vars for Test
+# TEST env vars
   - name: e2eshipdemo-params-ecs-test
     type: params
-    flags:
-      - e2eShippableDemo
     version:
       params:
         ENVIRONMENT: "TEST"
         PORT: 80
 
-################################
-
-# set service version seed
-  - name: e2eshipdemo-version-ecs
-    type: version
-    flags:
-      - e2eShippableDemo
-    seed:
-      versionName: "1.1.0"
-
-################################
-
-# PROD resources
-
-# Docker Image Options
+# PROD Docker Image Options
   - name: e2eshipdemo-img-options-ecs-prod
     type: dockerOptions
-    flags:
-      - e2eShippableDemo
     version:
       memory: 64
       cpuShares: 128
@@ -116,23 +54,218 @@ resources:
       labels: 
         app: e2eshippabledemo
         env: prod
-
-# env vars for Prod
-  - name: e2eshipdemo-params-ecs-prod
-    type: params
     flags:
       - e2eShippableDemo
+
+# PROD env vars
+  - name: e2eshipdemo-params-ecs-prod
+    type: params
     version:
       params:
         ENVIRONMENT: "PROD"
         PORT: 80
+    flags:
+      - e2eShippableDemo
+
+#---------------------------------------------------------------#
+#----------------------------- Test ----------------------------#
+#---------------------------------------------------------------#
+
+# REPO of SIT scripts
+  - name: sit_repo
+    type: gitRepo
+    integration: "demo_gh"
+    pointer:
+      sourceName: "avinci/demoSIT"
+      branch: master
+    flags:
+      - e2eShippableDemo
+
+# SIT env vars
+  - name: sit_params
+    type: params
+    version:
+      params:
+        API_URL: "54.158.18.50:8080"
+        API_TOKEN: "NA"
+    flags:
+      - e2eShippableDemo
+
+#---------------------------------------------------------------#
+#--------------------------- Release ---------------------------#
+#---------------------------------------------------------------#
+
+# Seed version resource
+  - name: seed_app_ver
+    type: version
+    seed:
+      versionName: "1.0.0"
+    flags:
+      - e2eShippableDemo
+
+# Current Prod version
+  - name: prod_app_ver
+    type: params
+    version:
+      params:
+        RELEASE_VER_NUMBER: "1.0.0"
+    flags:
+      - e2eShippableDemo
+ 
+#---------------------------------------------------------------#
+#------------------------------ Ops ----------------------------#
+#---------------------------------------------------------------#
+
+## TEST resources
+
+# TEST Terraform STATE
+  - name: test_tf_state
+    type: state
+    flags:
+      - e2eShippableDemo
+
+# TEST env - AWS cluster
+  - name: e2eshipdemo-cluster-ecs-test
+    type: cluster
+    integration: ttrahan-aws # replace with your AWS integration name
+    pointer:
+      # replace with your Amazon ECS cluster name and region
+      sourceName : "test-aws"
+      region: "us-east-1"
+    flags:
+      - e2eShippableDemo
+
+# TEST AWS ALB target group
+  - name: e2eshipdemo-alb-test     #required
+    type: loadBalancer      #required
+    pointer:
+      # replace with the ARN for your Amazon EC/2 Application Load Balancer Target Group
+      sourceName: "arn:aws:elasticloadbalancing:us-east-1:288971733297:targetgroup/demoWebTest/56a74253de7101ee"
+      method: application
+    flags:
+      - e2eShippableDemo
+
+## PROD resources
+
+# Terraform STATE for PROD
+  - name: prod_tf_state
+    type: state
+    flags:
+      - e2eShippableDemo
+
+# PROD env - AWS cluster
+  - name: e2eshipdemo-cluster-ecs-prod
+    type: cluster
+    integration: ttrahan-aws # replace with your AWS integration name
+    pointer:
+      # replace with your Amazon ECS cluster name and region
+      sourceName : "prod-aws"
+      region: "us-east-1"
+    flags:
+      - e2eShippableDemo
+
+# PROD AWS ALB target group
+  - name: e2eshipdemo-alb-prod     #required
+    type: loadBalancer      #required
+    pointer:
+      # replace with the ARN for your Amazon EC/2 Application Load Balancer Target Group
+      sourceName: "arn:aws:elasticloadbalancing:us-east-1:288971733297:targetgroup/demoWeb/29435cb0f31ac400"
+      method: application
+    flags:
+      - e2eShippableDemo
 
 # PROD replicas
   - name: e2eshipdemo-replicas-ecs-prod
     type: replicas
-    flags:
-      - e2eShippableDemo
     version:
       count: 2
+    flags:
+      - e2eShippableDemo
 
-# ################################
+#---------------------------------------------------------------#
+#--------------------------- SecOps ----------------------------#
+#---------------------------------------------------------------#
+
+# Automation scripts repo
+  - name: auto_repo
+    type: gitRepo
+    integration: "ttrahan_gh"
+    pointer:
+      sourceName: "ttrahan/e2eShippableDemo"
+      branch: master
+    flags:
+      - e2eShippableDemo
+
+# AWS credentials
+  - name: aws_creds
+    type: integration
+    integration: "ttrahan-aws"
+    flags:
+      - e2eShippableDemo
+
+# AWS PEM key
+  - name: aws_pem
+    type: integration
+    integration: "demo_aws_pem"
+    flags:
+      - e2eShippableDemo
+
+# Networking Terraform State
+  - name: net_tf_state
+    type: state
+    flags:
+      - e2eShippableDemo
+
+# VPC Creation Config
+  - name: net_conf
+    type: params
+    version:
+      params:
+        REGION: "us-east-1"
+        AMI_VPC: "ami_vpc"
+        AMI_NETWORK_CIDR: "200.0.0.0/16"
+        AMI_PUBLIC_CIDR: "200.0.0.0/24"
+        TEST_VPC: "test_vpc"
+        TEST_NETWORK_CIDR: "210.0.0.0/16"
+        TEST_PUBLIC_CIDR: "210.0.0.0/24"
+        PROD_VPC: "prod_vpc"
+        PROD_NETWORK_CIDR: "100.0.0.0/16"
+        PROD_PUBLIC_CIDR: "100.0.0.0/24"
+    flags:
+      - e2eShippableDemo
+
+# Base ECS AMI ID
+  - name: ami_sec_approved
+    type: params
+    version:
+      params:
+        SEED: "initial_version"
+    flags:
+      - e2eShippableDemo
+
+# OUT AWS AMI VPC IDs
+  - name: ami_vpc_conf
+    type: params
+    version:
+      params:
+        SEED: "initial_version"
+    flags:
+      - e2eShippableDemo
+
+# OUT AWS TEST VPC IDs
+  - name: test_vpc_conf
+    type: params
+    version:
+      params:
+        SEED: "initial_version"
+    flags:
+      - e2eShippableDemo
+
+# OUT AWS PROD VPC IDs
+  - name: prod_vpc_conf
+    type: params
+    version:
+      params:
+        SEED: "initial_version"
+    flags:
+      - e2eShippableDemo

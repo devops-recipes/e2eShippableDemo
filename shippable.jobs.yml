@@ -1,43 +1,45 @@
 jobs:
 
-# jobs for this shippableSamples demo 
+#---------------------------------------------------------------#
+#----------------------------   Dev   --------------------------#
+#---------------------------------------------------------------#
 
-################################
-
-# runCI job that builds and pushes artifact to Amazon ECR
+# runCI job that builds and pushes artifact
   - name: e2eShippableDemo_runCI
     type: runCI
-    flags:
-      - e2eShippableDemo
     steps:
       - OUT: e2eshipdemo-img-ecs
-  
-# generate manifest
-  - name: e2eshipdemo-manifest-ecs
-    type: manifest
     flags:
       - e2eShippableDemo
+  
+# Generate manifest
+  - name: e2eshipdemo-manifest-ecs
+    type: manifest
     steps:
       - IN: e2eshipdemo-img-ecs
       - IN: e2eshipdemo-img-options-ecs-test
       - TASK: managed
+    flags:
+      - e2eShippableDemo
 
 # Create TEST Release
   - name: e2eshipdemo-release-ecs-beta
     type: release
-    flags:
-      - e2eShippableDemo
     steps:
       - IN: e2eshipdemo-manifest-ecs
       - IN: e2eshipdemo-version-ecs
       - TASK: managed
         bump: beta
-
-# TEST deployment to Amazon ECS
-  - name: e2eshipdemo-deploy-ecs-test
-    type: deploy
     flags:
       - e2eShippableDemo
+
+#---------------------------------------------------------------#
+#----------------------------   Test   -------------------------#
+#---------------------------------------------------------------#
+
+# DEPLOY to TEST environment
+  - name: e2eshipdemo-deploy-ecs-test
+    type: deploy
     steps:
       - IN: e2eshipdemo-release-ecs-beta
       - IN: e2eshipdemo-params-ecs-test
@@ -48,27 +50,123 @@ jobs:
             image: e2eshipdemo-img-ecs
             port: 80
       - TASK: managed
+    flags:
+      - e2eShippableDemo
+
+# RUN System Integration Testing
+  - name: sit
+    type: runSh
+    steps:
+      - IN: sit_repo
+      - IN: deploy_app_test
+      - IN: sit_params
+      - TASK:
+        - script: IN/sit_repo/gitRepo/test.sh sit_params
+    on_success:
+      - script: touch /build/state/success.txt
+    on_failure:
+      - script: touch /build/state/failure.txt
+    flags:
+      - e2eShippableDemo
+
+#---------------------------------------------------------------#
+#-------------------------   Release   -------------------------#
+#---------------------------------------------------------------#
 
 # Create PROD Release
   - name: e2eshipdemo-release-ecs-prod
     type: release
-    flags:
-      - e2eShippableDemo
     steps:
       - IN: e2eshipdemo-deploy-ecs-test
         switch: off
       # - IN: e2eshipdemo-version-ecs
       - TASK: managed
         bump: final
+    notify:
+      - on_success: slack
+    flags:
+      - e2eShippableDemo
+
+# Trigger PROD deployment
+  - name: trig_prod_deploy
+    type: runSh
+    steps:
+      - IN: auto_repo
+        switch: off
+      - IN: release_app
+        switch: off
+      - OUT: prod_app_ver
+      - TASK:
+        - script: IN/auto_repo/gitRepo/setVer.sh release_app prod_app_ver
+    flags:
+      - e2eShippableDemo
+
+#---------------------------------------------------------------#
+#----------------------------   Ops   --------------------------#
+#---------------------------------------------------------------#
+
+# Provision TEST VMs and ECS cluster with Terraform
+  - name: prov_ecs_test
+    type: runSh
+    steps:
+      - IN: test_tf_state
+      - IN: create_app_man
+      - IN: ami_sec_approved
+        switch: off
+      - IN: test_vpc_conf
+        switch: off
+      - IN: aws_pem
+        switch: off
+      - IN: aws_creds
+        switch: off
+      - IN: auto_repo
+        switch: off
+      - TASK:
+        - script: . /build/IN/auto_repo/gitRepo/shipUtil.sh
+        - script: . /build/IN/auto_repo/gitRepo/awsTestECS/provTestInfra.sh create
+      - OUT: test_env_ecs
+      - OUT: test_tf_state
+    on_success:
+      - script: echo "SUCCESS"
+    on_failure:
+      - script: echo "FAILURE"
+    always:
+      - script: . /build/IN/auto_repo/gitRepo/shipUtil.sh && . /build/IN/auto_repo/gitRepo/archiveState.sh awsTestECS test_tf_state
+    flags:
+      - e2eShippableDemo
+
+# Provision PROD VMs and ECS cluster with Terraform
+  - name: prov_ecs_prod
+    type: runSh
+    steps:
+      - IN: prod_tf_state
+      - IN: ami_sec_approved
+      - IN: prod_vpc_conf
+        switch: off
+      - IN: aws_pem
+        switch: off
+      - IN: aws_creds
+        switch: off
+      - IN: auto_repo
+        switch: off
+      - TASK:
+        - script: . /build/IN/auto_repo/gitRepo/shipUtil.sh
+        - script: . /build/IN/auto_repo/gitRepo/awsProdECS/provProdInfra.sh create
+      - OUT: prod_env_ecs
+      - OUT: prod_tf_state
+    on_success:
+      - script: echo "SUCCESS"
+    on_failure:
+      - script: echo "FAILURE"
+    always:
+      - script: . /build/IN/auto_repo/gitRepo/shipUtil.sh && . /build/IN/auto_repo/gitRepo/archiveState.sh awsProdECS prod_tf_state
+    flags:
+      - e2eShippableDemo
 
 # PROD deployment to Amazon ECS
   - name: e2eshipdemo-deploy-ecs-prod
     type: deploy
-    flags:
-      - e2eShippableDemo
     steps:
-      # - IN: e2eshipdemo-deploy-ecs-test
-      #   switch: off
       - IN: e2eshipdemo-release-ecs-prod
         switch: off
       - IN: e2eshipdemo-params-ecs-prod
@@ -81,3 +179,138 @@ jobs:
             image: e2eshipdemo-img-ecs
             port: 80
       - TASK: managed
+        # deployMethod: replace
+    flags:
+      - e2eShippableDemo
+
+# Deprovision TEST VMs and ECS cluster
+  - name: de_prov_ecs_test
+    type: runSh
+    steps:
+      - IN: test_tf_state
+      - IN: sit
+        switch: off
+      - IN: test_vpc_conf
+        switch: off
+      - IN: aws_creds
+        switch: off
+      - IN: auto_repo
+        switch: off
+      - IN: ami_sec_approved
+        switch: off
+      - TASK:
+        - script: . /build/IN/auto_repo/gitRepo/shipUtil.sh
+        - script: . /build/IN/auto_repo/gitRepo/awsTestECS/provTestInfra.sh destroy
+      - OUT: test_tf_state
+    on_success:
+      - script: echo "SUCCESS"
+    on_failure:
+      - script: echo "FAILURE"
+    always:
+      - script: . /build/IN/auto_repo/gitRepo/shipUtil.sh && . /build/IN/auto_repo/gitRepo/archiveState.sh awsTestECS test_tf_state
+    flags:
+      - e2eShippableDemo
+
+# Deprovision PROD VMs and ECS cluster
+  - name: de_prov_ecs_prod
+    type: runSh
+    steps:
+      - IN: prov_ecs_prod
+        switch: off
+      - IN: prod_tf_state
+      - IN: prod_vpc_conf
+        switch: off
+      - IN: aws_creds
+        switch: off
+      - IN: auto_repo
+        switch: off
+      - IN: ami_sec_approved
+        switch: off
+      - TASK:
+        - script: . /build/IN/auto_repo/gitRepo/shipUtil.sh
+        - script: . /build/IN/auto_repo/gitRepo/awsProdECS/provProdInfra.sh destroy
+      - OUT: prod_tf_state
+    on_success:
+      - script: echo "SUCCESS"
+    on_failure:
+      - script: echo "FAILURE"
+    always:
+      - script: . /build/IN/auto_repo/gitRepo/shipUtil.sh && . /build/IN/auto_repo/gitRepo/archiveState.sh awsProdECS prod_tf_state
+    flags:
+      - e2eShippableDemo
+
+#---------------------------------------------------------------#
+#---------------------------- SecOps ---------------------------#
+#---------------------------------------------------------------#
+
+# Set up Network - AWS IAM roles, profiles, VPCs etc. with TERRAFORM
+  - name: setup_net
+    type: runSh
+    steps:
+      - IN: net_tf_state
+      - IN: net_conf
+      - IN: aws_creds
+        switch: off
+      - IN: auto_repo
+        switch: off
+      - TASK:
+        - script: . /build/IN/auto_repo/gitRepo/shipUtil.sh
+        - script: . /build/IN/auto_repo/gitRepo/awsSetupIAM/provNetwork.sh create
+      - OUT: ami_vpc_conf
+      - OUT: test_vpc_conf
+      - OUT: prod_vpc_conf
+      - OUT: net_tf_state
+    on_success:
+      - script: echo "SUCCESS"
+    on_failure:
+      - script: echo "FAILURE"
+    always:
+      - script: . /build/IN/auto_repo/gitRepo/shipUtil.sh && . /build/IN/auto_repo/gitRepo/archiveState.sh awsSetupIAM net_tf_state
+    flags:
+      - e2eShippableDemo
+
+# Build Machine image - AWS AMI used to deploy ECS VMs with PACKER
+  - name: build_ecs_ami
+    type: runSh
+    steps:
+      - IN: aws_creds
+        switch: off
+      - IN: auto_repo
+        switch: off
+      - IN: ami_vpc_conf
+      - TASK:
+        - script: . IN/auto_repo/gitRepo/shipUtil.sh
+        - script: . IN/auto_repo/gitRepo/awsBuildAMI/basePack.sh
+      - OUT: ami_sec_approved
+    on_success:
+      - script: echo "SUCCESS"
+    on_failure:
+      - script: echo "FAILURE"
+    flags:
+      - e2eShippableDemo
+
+# Deprovision Network
+  - name: de_prov_net
+    type: runSh
+    steps:
+      - IN: setup_net
+        switch: off
+      - IN: net_tf_state
+      - IN: net_conf
+        switch: off
+      - IN: aws_creds
+        switch: off
+      - IN: auto_repo
+        switch: off
+      - TASK:
+        - script: . /build/IN/auto_repo/gitRepo/shipUtil.sh
+        - script: . /build/IN/auto_repo/gitRepo/awsSetupIAM/provNetwork.sh destroy
+      - OUT: net_tf_state
+    on_success:
+      - script: echo "SUCCESS"
+    on_failure:
+      - script: echo "FAILURE"
+    always:
+      - script: . /build/IN/auto_repo/gitRepo/shipUtil.sh && . /build/IN/auto_repo/gitRepo/archiveState.sh awsSetupIAM net_tf_state
+    flags:
+      - e2eShippableDemo
