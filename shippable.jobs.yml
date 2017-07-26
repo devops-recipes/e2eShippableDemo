@@ -187,6 +187,8 @@ jobs:
   - name: de_prov_ecs_test
     type: runSh
     steps:
+      - IN: prov_ecs_test
+        switch: off
       - IN: test_tf_state
       - IN: sit
         switch: off
