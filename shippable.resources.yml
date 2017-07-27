@@ -181,7 +181,7 @@ resources:
 # Automation scripts repo
   - name: auto_repo
     type: gitRepo
-    integration: "ttrahan_gh"
+    integration: "ttrahan-gh"
     pointer:
       sourceName: "ttrahan/e2eShippableDemo"
       branch: master
@@ -198,7 +198,7 @@ resources:
 # AWS PEM key
   - name: aws_pem
     type: integration
-    integration: "demo_aws_pem"
+    integration: "kp-us-east-1"
     flags:
       - e2eShippableDemo
 
