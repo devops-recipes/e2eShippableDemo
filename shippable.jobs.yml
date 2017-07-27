@@ -86,12 +86,7 @@ jobs:
     flags:
       - e2eShippableDemo
 
-# # TRIGGER PROD deployment
-#   - name: trig_prod_deploy
-#     type: runSh
-#     steps:
-#       - IN: auto_repo
-#         switch: off
+ switch: off
 #       - IN: release_app
 #         switch: off
 #       - OUT: prod_app_ver
@@ -109,7 +104,7 @@ jobs:
     type: runSh
     steps:
       - IN: test_tf_state
-      - IN: create_app_man
+      - IN: e2eshipdemo-manifest-ecs
       - IN: ami_sec_approved
         switch: off
       - IN: test_vpc_conf
@@ -123,7 +118,7 @@ jobs:
       - TASK:
         - script: . /build/IN/auto_repo/gitRepo/shipUtil.sh
         - script: . /build/IN/auto_repo/gitRepo/awsTestECS/provTestInfra.sh create
-      - OUT: e2eshipdemo-cluster-ecs-prod
+      - OUT: test_env_ecs
       - OUT: test_tf_state
     on_success:
       - script: echo "SUCCESS"
@@ -151,7 +146,7 @@ jobs:
       - TASK:
         - script: . /build/IN/auto_repo/gitRepo/shipUtil.sh
         - script: . /build/IN/auto_repo/gitRepo/awsProdECS/provProdInfra.sh create
-      - OUT: e2eshipdemo-cluster-ecs-prod
+      - OUT: prod_env_ecs
       - OUT: prod_tf_state
     on_success:
       - script: echo "SUCCESS"
