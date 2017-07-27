@@ -5,7 +5,7 @@ export CURR_JOB_CONTEXT="awsTestECS"
 export STATE_RES="test_tf_state"
 export RES_CONF="test_vpc_conf"
 export RES_AMI="ami_sec_approved"
-export OUT_RES_SET="test_env_ecs"
+export OUT_RES_SET="e2eshipdemo-cluster-ecs-test"
 
 export RES_REPO="auto_repo"
 export RES_AWS_CREDS="aws_creds"

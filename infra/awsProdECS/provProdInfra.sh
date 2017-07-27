@@ -5,7 +5,7 @@ export CURR_JOB_CONTEXT="awsProdECS"
 export STATE_RES="prod_tf_state"
 export RES_CONF="prod_vpc_conf"
 export RES_AMI="ami_sec_approved"
-export OUT_RES_SET="prod_env_ecs"
+export OUT_RES_SET="e2eshipdemo-cluster-ecs-prod"
 
 export RES_REPO="auto_repo"
 export RES_AWS_CREDS="aws_creds"
