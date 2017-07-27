@@ -74,9 +74,9 @@ resources:
 # REPO of SIT scripts
   - name: sit_repo
     type: gitRepo
-    integration: "demo_gh"
+    integration: "ttrahan-gh"
     pointer:
-      sourceName: "avinci/demoSIT"
+      sourceName: "ttrahan/e2eShippableDemo"
       branch: master
     flags:
       - e2eShippableDemo
@@ -95,15 +95,7 @@ resources:
 #--------------------------- Release ---------------------------#
 #---------------------------------------------------------------#
 
-# Seed version resource
-  - name: seed_app_ver
-    type: version
-    seed:
-      versionName: "1.0.0"
-    flags:
-      - e2eShippableDemo
-
-# Current Prod version
+# Current PROD version - used for pinning
   - name: prod_app_ver
     type: params
     version:
