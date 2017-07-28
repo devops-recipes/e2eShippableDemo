@@ -55,7 +55,7 @@ jobs:
 
 # Run System Integration Testing
   - name: sit
-    type: runSh
+    type: runCLI
     steps:
       - IN: e2eshipdemo-deploy-ecs-test
       - IN: sit_repo
@@ -88,7 +88,7 @@ jobs:
 
 # # TRIGGER PROD deployment
 #   - name: trig_prod_deploy
-#     type: runSh
+#     type: runCLI
 #     steps:
 #       - IN: auto_repo 
 #         switch: off
@@ -106,10 +106,9 @@ jobs:
 
 # Provision TEST VMs and ECS cluster with Terraform
   - name: prov_ecs_test
-    type: runSh
+    type: runCLI
     steps:
       - IN: test_tf_state
-      - IN: e2eshipdemo-manifest-ecs
       - IN: ami_sec_approved
         switch: off
       - IN: test_vpc_conf
@@ -136,7 +135,7 @@ jobs:
 
 # Provision PROD VMs and ECS cluster with Terraform
   - name: prov_ecs_prod
-    type: runSh
+    type: runCLI
     steps:
       - IN: prod_tf_state
       - IN: ami_sec_approved
@@ -184,7 +183,7 @@ jobs:
 
 # Deprovision TEST VMs and ECS cluster
   - name: de_prov_ecs_test
-    type: runSh
+    type: runCLI
     steps:
       - IN: prov_ecs_test
         switch: off
@@ -214,7 +213,7 @@ jobs:
 
 # Deprovision PROD VMs and ECS cluster
   - name: de_prov_ecs_prod
-    type: runSh
+    type: runCLI
     steps:
       - IN: prov_ecs_prod
         switch: off
@@ -246,7 +245,7 @@ jobs:
 
 # Set up Network - AWS IAM roles, profiles, VPCs etc. with TERRAFORM
   - name: setup_net
-    type: runSh
+    type: runCLI
     steps:
       - IN: net_tf_state
       - IN: net_conf
@@ -272,7 +271,7 @@ jobs:
 
 # Build Machine image - AWS AMI used to deploy ECS VMs with PACKER
   - name: build_ecs_ami
-    type: runSh
+    type: runCLI
     steps:
       - IN: aws_creds
         switch: off
@@ -292,7 +291,7 @@ jobs:
 
 # Deprovision Network
   - name: de_prov_net
-    type: runSh
+    type: runCLI
     steps:
       - IN: setup_net
         switch: off
