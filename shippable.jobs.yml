@@ -188,8 +188,6 @@ jobs:
       - IN: prov_ecs_test
         switch: off
       - IN: test_tf_state
-      - IN: sit
-        switch: off
       - IN: test_vpc_conf
         switch: off
       - IN: aws_creds
