@@ -49,8 +49,8 @@ set_context(){
   ship_resource_copy_file_from_state $STATE_RES $TF_STATEFILE .
 
   # This gets the PEM key for SSH into the machines
-  ship_resource_get_integration $RES_AWS_PEM key > demo-key.pem
-  chmod 600 demo-key.pem
+  ship_resource_get_integration $RES_AWS_PEM key > ~/.ssh/demo-key.pem
+  chmod 600 ~/.ssh/demo-key.pem
 
   # now setup the variables based on context
   # naming the file terraform.tfvars makes terraform automatically load it
