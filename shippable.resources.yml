@@ -198,7 +198,7 @@ resources:
 # AWS PEM key
   - name: aws_pem
     type: integration
-    integration: "kp-us-east-1"
+    integration: "demo-key"
     flags:
       - e2eShippableDemo
 

@@ -9,7 +9,6 @@ export OUT_RES_SET="e2eshipdemo-cluster-ecs-prod"
 
 export RES_REPO="auto_repo"
 export RES_AWS_CREDS="aws_creds"
-export RES_AWS_PEM="aws_pem"
 export TF_STATEFILE="terraform.tfstate"
 
 # get the path where gitRepo code is available
