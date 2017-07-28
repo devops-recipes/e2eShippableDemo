@@ -41,6 +41,7 @@ set_context(){
 
   # This restores the terraform state file
   ship_resource_copy_file_from_state $STATE_RES $TF_STATEFILE .
+  ls -la .
 
   # now setup the variables based on context
   # naming the file terraform.tfvars makes terraform automatically load it
