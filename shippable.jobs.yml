@@ -131,7 +131,7 @@ jobs:
     on_failure:
       - script: echo "FAILURE"
     always:
-      - script: . /build/IN/auto_repo/gitRepo/infra/shipUtil.sh && . /build/IN/auto_repo/gitRepo/infra/archiveState.sh awsTestECS test_tf_state
+      - script: . /build/IN/auto_repo/gitRepo/infra/shipUtil.sh && . /build/IN/auto_repo/gitRepo/infra/archiveState.sh infra/awsTestECS test_tf_state
     flags:
       - e2eShippableDemo
 
@@ -159,7 +159,7 @@ jobs:
     on_failure:
       - script: echo "FAILURE"
     always:
-      - script: . /build/IN/auto_repo/gitRepo/infra/shipUtil.sh && . /build/IN/auto_repo/gitRepo/infra/archiveState.sh awsProdECS prod_tf_state
+      - script: . /build/IN/auto_repo/gitRepo/infra/shipUtil.sh && . /build/IN/auto_repo/gitRepo/infra/archiveState.sh infra/awsProdECS prod_tf_state
     flags:
       - e2eShippableDemo
 
@@ -207,7 +207,7 @@ jobs:
     on_failure:
       - script: echo "FAILURE"
     always:
-      - script: . /build/IN/auto_repo/gitRepo/infra/shipUtil.sh && . /build/IN/auto_repo/gitRepo/infra/archiveState.sh awsTestECS test_tf_state
+      - script: . /build/IN/auto_repo/gitRepo/infra/shipUtil.sh && . /build/IN/auto_repo/gitRepo/infra/archiveState.sh infra/awsTestECS test_tf_state
     flags:
       - e2eShippableDemo
 
@@ -235,7 +235,7 @@ jobs:
     on_failure:
       - script: echo "FAILURE"
     always:
-      - script: . /build/IN/auto_repo/gitRepo/infra/shipUtil.sh && . /build/IN/auto_repo/gitRepo/infra/archiveState.sh awsProdECS prod_tf_state
+      - script: . /build/IN/auto_repo/gitRepo/infra/shipUtil.sh && . /build/IN/auto_repo/gitRepo/infra/archiveState.sh infra/awsProdECS prod_tf_state
     flags:
       - e2eShippableDemo
 
@@ -265,7 +265,7 @@ jobs:
     on_failure:
       - script: echo "FAILURE"
     always:
-      - script: . /build/IN/auto_repo/gitRepo/infra/shipUtil.sh && . /build/IN/auto_repo/gitRepo/infra/archiveState.sh awsSetupIAM net_tf_state
+      - script: . /build/IN/auto_repo/gitRepo/infra/shipUtil.sh && . /build/IN/auto_repo/gitRepo/infra/archiveState.sh infra/awsSetupIAM net_tf_state
     flags:
       - e2eShippableDemo
 
@@ -311,6 +311,6 @@ jobs:
     on_failure:
       - script: echo "FAILURE"
     always:
-      - script: . /build/IN/auto_repo/gitRepo/infra/shipUtil.sh && . /build/IN/auto_repo/gitRepo/infra/archiveState.sh awsSetupIAM net_tf_state
+      - script: . /build/IN/auto_repo/gitRepo/infra/shipUtil.sh && . /build/IN/auto_repo/gitRepo/infra/archiveState.sh infra/awsSetupIAM net_tf_state
     flags:
       - e2eShippableDemo
