@@ -86,7 +86,12 @@ jobs:
     flags:
       - e2eShippableDemo
 
- switch: off
+# # TRIGGER PROD deployment
+#   - name: trig_prod_deploy
+#     type: runSh
+#     steps:
+#       - IN: auto_repo 
+#         switch: off
 #       - IN: release_app
 #         switch: off
 #       - OUT: prod_app_ver
