@@ -124,6 +124,7 @@ jobs:
       - TASK:
         - script: . /build/IN/auto_repo/gitRepo/infra/shipUtil.sh
         - script: . /build/IN/auto_repo/gitRepo/infra/awsTestECS/provTestInfra.sh create
+        - script: sleep 30s
       - OUT: e2eshipdemo-cluster-ecs-test
       - OUT: test_tf_state
     on_success:
