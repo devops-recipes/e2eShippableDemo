@@ -9,6 +9,7 @@ export OUT_RES_SET="e2eshipdemo-cluster-ecs-prod"
 
 export RES_REPO="auto_repo"
 export RES_AWS_CREDS="aws_creds"
+export RES_AWS_PEM="aws_pem"
 export TF_STATEFILE="terraform.tfstate"
 
 # get the path where gitRepo code is available
@@ -32,6 +33,7 @@ set_context(){
   echo "CURR_JOB_CONTEXT=$CURR_JOB_CONTEXT"
   echo "RES_REPO=$RES_REPO"
   echo "RES_AWS_CREDS=$RES_AWS_CREDS"
+  echo "RES_AWS_PEM=$RES_AWS_PEM"
   echo "RES_REPO_CONTEXT=$RES_REPO_CONTEXT"
 
   echo "AWS_ACCESS_KEY_ID=${#AWS_ACCESS_KEY_ID}" #print only length not value
@@ -39,6 +41,10 @@ set_context(){
 
   # This restores the terraform state file
   ship_resource_copy_file_from_state $STATE_RES $TF_STATEFILE .
+
+  # This gets the PEM key for SSH into the machines
+  ship_resource_get_integration $RES_AWS_PEM key > demo-key.pem
+  chmod 600 demo-key.pem
 
   # now setup the variables based on context
   # naming the file terraform.tfvars makes terraform automatically load it
