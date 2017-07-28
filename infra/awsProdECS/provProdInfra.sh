@@ -9,6 +9,7 @@ export OUT_RES_SET="e2eshipdemo-cluster-ecs-prod"
 
 export RES_REPO="auto_repo"
 export RES_AWS_CREDS="aws_creds"
+export RES_AWS_PEM="aws_pem"
 export TF_STATEFILE="terraform.tfstate"
 
 # get the path where gitRepo code is available
@@ -40,7 +41,6 @@ set_context(){
 
   # This restores the terraform state file
   ship_resource_copy_file_from_state $STATE_RES $TF_STATEFILE .
-  ls -la .
 
   # now setup the variables based on context
   # naming the file terraform.tfvars makes terraform automatically load it
