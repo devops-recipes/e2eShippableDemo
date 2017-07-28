@@ -1,7 +1,7 @@
 #!/bin/bash -e
 
 export ACTION=$1
-export CURR_JOB_CONTEXT="awsProdECS"
+export CURR_JOB_CONTEXT="infra/awsProdECS"
 export STATE_RES="prod_tf_state"
 export RES_CONF="prod_vpc_conf"
 export RES_AMI="ami_sec_approved"

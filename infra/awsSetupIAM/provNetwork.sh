@@ -1,7 +1,7 @@
 #!/bin/bash -e
 
 export ACTION=$1
-export CURR_JOB_CONTEXT="awsSetupIAM"
+export CURR_JOB_CONTEXT="infra/awsSetupIAM"
 export STATE_RES="net_tf_state"
 export RES_CONF="net_conf"
 export OUT_AMI_VPC="ami_vpc_conf"

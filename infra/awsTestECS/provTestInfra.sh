@@ -1,7 +1,7 @@
 #!/bin/bash -e
 
 export ACTION=$1
-export CURR_JOB_CONTEXT="awsTestECS"
+export CURR_JOB_CONTEXT="infra/awsTestECS"
 export STATE_RES="test_tf_state"
 export RES_CONF="test_vpc_conf"
 export RES_AMI="ami_sec_approved"
