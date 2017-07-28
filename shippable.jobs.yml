@@ -57,7 +57,7 @@ jobs:
   - name: sit
     type: runCLI
     steps:
-      - IN: e2eshipdemo-deploy-ecs-test
+      - IN: prov_ecs_test
       - IN: sit_repo
       - IN: sit_params
       - TASK:
@@ -108,6 +108,7 @@ jobs:
   - name: prov_ecs_test
     type: runCLI
     steps:
+      - IN: e2eshipdemo-release-ecs-beta
       - IN: test_tf_state
       - IN: ami_sec_approved
         switch: off
