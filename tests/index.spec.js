@@ -1,4 +1,4 @@
-var app = require('../../app');
+var app = require('../app');
 var request = require('supertest');
 
 describe('/ route',
