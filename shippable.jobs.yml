@@ -97,7 +97,7 @@ jobs:
 #         switch: off
 #       - OUT: prod_app_ver
 #       - TASK:
-#         - script: IN/auto_repo/gitRepo/setVer.sh release_app prod_app_ver
+#         - script: IN/auto_repo/gitRepo/infra/setVer.sh release_app prod_app_ver
 #     flags:
 #       - e2eShippableDemo
 
@@ -122,8 +122,8 @@ jobs:
       - IN: auto_repo
         switch: off
       - TASK:
-        - script: . /build/IN/auto_repo/gitRepo/shipUtil.sh
-        - script: . /build/IN/auto_repo/gitRepo/awsTestECS/provTestInfra.sh create
+        - script: . /build/IN/auto_repo/gitRepo/infra/shipUtil.sh
+        - script: . /build/IN/auto_repo/gitRepo/infra/awsTestECS/provTestInfra.sh create
       - OUT: e2eshipdemo-cluster-ecs-test
       - OUT: test_tf_state
     on_success:
@@ -131,7 +131,7 @@ jobs:
     on_failure:
       - script: echo "FAILURE"
     always:
-      - script: . /build/IN/auto_repo/gitRepo/shipUtil.sh && . /build/IN/auto_repo/gitRepo/archiveState.sh awsTestECS test_tf_state
+      - script: . /build/IN/auto_repo/gitRepo/infra/shipUtil.sh && . /build/IN/auto_repo/gitRepo/infra/archiveState.sh awsTestECS test_tf_state
     flags:
       - e2eShippableDemo
 
@@ -150,8 +150,8 @@ jobs:
       - IN: auto_repo
         switch: off
       - TASK:
-        - script: . /build/IN/auto_repo/gitRepo/shipUtil.sh
-        - script: . /build/IN/auto_repo/gitRepo/awsProdECS/provProdInfra.sh create
+        - script: . /build/IN/auto_repo/gitRepo/infra/shipUtil.sh
+        - script: . /build/IN/auto_repo/gitRepo/infra/awsProdECS/provProdInfra.sh create
       - OUT: e2eshipdemo-cluster-ecs-prod
       - OUT: prod_tf_state
     on_success:
@@ -159,7 +159,7 @@ jobs:
     on_failure:
       - script: echo "FAILURE"
     always:
-      - script: . /build/IN/auto_repo/gitRepo/shipUtil.sh && . /build/IN/auto_repo/gitRepo/archiveState.sh awsProdECS prod_tf_state
+      - script: . /build/IN/auto_repo/gitRepo/infra/shipUtil.sh && . /build/IN/auto_repo/gitRepo/infra/archiveState.sh awsProdECS prod_tf_state
     flags:
       - e2eShippableDemo
 
@@ -199,15 +199,15 @@ jobs:
       - IN: ami_sec_approved
         switch: off
       - TASK:
-        - script: . /build/IN/auto_repo/gitRepo/shipUtil.sh
-        - script: . /build/IN/auto_repo/gitRepo/awsTestECS/provTestInfra.sh destroy
+        - script: . /build/IN/auto_repo/gitRepo/infra/shipUtil.sh
+        - script: . /build/IN/auto_repo/gitRepo/infra/awsTestECS/provTestInfra.sh destroy
       - OUT: test_tf_state
     on_success:
       - script: echo "SUCCESS"
     on_failure:
       - script: echo "FAILURE"
     always:
-      - script: . /build/IN/auto_repo/gitRepo/shipUtil.sh && . /build/IN/auto_repo/gitRepo/archiveState.sh awsTestECS test_tf_state
+      - script: . /build/IN/auto_repo/gitRepo/infra/shipUtil.sh && . /build/IN/auto_repo/gitRepo/infra/archiveState.sh awsTestECS test_tf_state
     flags:
       - e2eShippableDemo
 
@@ -227,15 +227,15 @@ jobs:
       - IN: ami_sec_approved
         switch: off
       - TASK:
-        - script: . /build/IN/auto_repo/gitRepo/shipUtil.sh
-        - script: . /build/IN/auto_repo/gitRepo/awsProdECS/provProdInfra.sh destroy
+        - script: . /build/IN/auto_repo/gitRepo/infra/shipUtil.sh
+        - script: . /build/IN/auto_repo/gitRepo/infra/awsProdECS/provProdInfra.sh destroy
       - OUT: prod_tf_state
     on_success:
       - script: echo "SUCCESS"
     on_failure:
       - script: echo "FAILURE"
     always:
-      - script: . /build/IN/auto_repo/gitRepo/shipUtil.sh && . /build/IN/auto_repo/gitRepo/archiveState.sh awsProdECS prod_tf_state
+      - script: . /build/IN/auto_repo/gitRepo/infra/shipUtil.sh && . /build/IN/auto_repo/gitRepo/infra/archiveState.sh awsProdECS prod_tf_state
     flags:
       - e2eShippableDemo
 
@@ -254,8 +254,8 @@ jobs:
       - IN: auto_repo
         switch: off
       - TASK:
-        - script: . /build/IN/auto_repo/gitRepo/shipUtil.sh
-        - script: . /build/IN/auto_repo/gitRepo/awsSetupIAM/provNetwork.sh create
+        - script: . /build/IN/auto_repo/gitRepo/infra/shipUtil.sh
+        - script: . /build/IN/auto_repo/gitRepo/infra/awsSetupIAM/provNetwork.sh create
       - OUT: ami_vpc_conf
       - OUT: test_vpc_conf
       - OUT: prod_vpc_conf
@@ -265,7 +265,7 @@ jobs:
     on_failure:
       - script: echo "FAILURE"
     always:
-      - script: . /build/IN/auto_repo/gitRepo/shipUtil.sh && . /build/IN/auto_repo/gitRepo/archiveState.sh awsSetupIAM net_tf_state
+      - script: . /build/IN/auto_repo/gitRepo/infra/shipUtil.sh && . /build/IN/auto_repo/gitRepo/infra/archiveState.sh awsSetupIAM net_tf_state
     flags:
       - e2eShippableDemo
 
@@ -279,8 +279,8 @@ jobs:
         switch: off
       - IN: ami_vpc_conf
       - TASK:
-        - script: . IN/auto_repo/gitRepo/shipUtil.sh
-        - script: . IN/auto_repo/gitRepo/awsBuildAMI/basePack.sh
+        - script: . IN/auto_repo/gitRepo/infra/shipUtil.sh
+        - script: . IN/auto_repo/gitRepo/infra/awsBuildAMI/basePack.sh
       - OUT: ami_sec_approved
     on_success:
       - script: echo "SUCCESS"
@@ -303,14 +303,14 @@ jobs:
       - IN: auto_repo
         switch: off
       - TASK:
-        - script: . /build/IN/auto_repo/gitRepo/shipUtil.sh
-        - script: . /build/IN/auto_repo/gitRepo/awsSetupIAM/provNetwork.sh destroy
+        - script: . /build/IN/auto_repo/gitRepo/infra/shipUtil.sh
+        - script: . /build/IN/auto_repo/gitRepo/infra/awsSetupIAM/provNetwork.sh destroy
       - OUT: net_tf_state
     on_success:
       - script: echo "SUCCESS"
     on_failure:
       - script: echo "FAILURE"
     always:
-      - script: . /build/IN/auto_repo/gitRepo/shipUtil.sh && . /build/IN/auto_repo/gitRepo/archiveState.sh awsSetupIAM net_tf_state
+      - script: . /build/IN/auto_repo/gitRepo/infra/shipUtil.sh && . /build/IN/auto_repo/gitRepo/infra/archiveState.sh awsSetupIAM net_tf_state
     flags:
       - e2eShippableDemo
