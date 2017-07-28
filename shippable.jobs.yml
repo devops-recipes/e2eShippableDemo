@@ -123,7 +123,7 @@ jobs:
       - TASK:
         - script: . /build/IN/auto_repo/gitRepo/shipUtil.sh
         - script: . /build/IN/auto_repo/gitRepo/awsTestECS/provTestInfra.sh create
-      - OUT: test_env_ecs
+      - OUT: e2eshipdemo-cluster-ecs-test
       - OUT: test_tf_state
     on_success:
       - script: echo "SUCCESS"
@@ -151,7 +151,7 @@ jobs:
       - TASK:
         - script: . /build/IN/auto_repo/gitRepo/shipUtil.sh
         - script: . /build/IN/auto_repo/gitRepo/awsProdECS/provProdInfra.sh create
-      - OUT: prod_env_ecs
+      - OUT: e2eshipdemo-cluster-ecs-prod
       - OUT: prod_tf_state
     on_success:
       - script: echo "SUCCESS"
