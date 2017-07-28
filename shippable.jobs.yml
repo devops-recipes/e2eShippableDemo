@@ -62,7 +62,7 @@ jobs:
       - IN: sit_repo
       - IN: sit_params
       - TASK:
-        - script: IN/sit_repo/gitRepo/test.sh sit_params
+        - script: IN/sit_repo/gitRepo/sit/test.sh sit_params
     on_success:
       - script: touch /build/state/success.txt
     on_failure:
