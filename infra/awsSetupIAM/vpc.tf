@@ -45,7 +45,7 @@ resource "aws_route_table_association" "ami_public_sn_rt_assn" {
 
 # ECS Instance Security group
 resource "aws_security_group" "ami_public_sg" {
-  name = "ami_pubic_sg"
+  name = "ami_public_sg"
   description = "AMI public access security group"
   vpc_id = "${aws_vpc.ami_vpc.id}"
 
@@ -90,7 +90,7 @@ resource "aws_security_group" "ami_public_sg" {
       "0.0.0.0/0"]
   }
   tags {
-    Name = "ami_pubic_sg"
+    Name = "ami_public_sg"
   }
 }
 
@@ -141,7 +141,7 @@ resource "aws_route_table_association" "test_public_sn_rt_assn" {
 
 # ECS Instance Security group
 resource "aws_security_group" "test_public_sg" {
-  name = "test_pubic_sg"
+  name = "test_public_sg"
   description = "Test public access security group"
   vpc_id = "${aws_vpc.test_vpc.id}"
 
@@ -186,7 +186,7 @@ resource "aws_security_group" "test_public_sg" {
       "0.0.0.0/0"]
   }
   tags {
-    Name = "test_pubic_sg"
+    Name = "test_public_sg"
   }
 }
 
@@ -237,7 +237,7 @@ resource "aws_route_table_association" "prod_public_sn_rt_assn" {
 
 # ECS Instance Security group
 resource "aws_security_group" "prod_public_sg" {
-  name = "prod_pubic_sg"
+  name = "prod_public_sg"
   description = "Prod public access security group"
   vpc_id = "${aws_vpc.prod_vpc.id}"
 
@@ -282,6 +282,6 @@ resource "aws_security_group" "prod_public_sg" {
       "0.0.0.0/0"]
   }
   tags {
-    Name = "prod_pubic_sg"
+    Name = "prod_public_sg"
   }
 }
