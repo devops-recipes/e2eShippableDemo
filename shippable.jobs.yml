@@ -41,6 +41,7 @@ jobs:
   - name: e2eshipdemo-deploy-ecs-test
     type: deploy
     steps:
+      - IN: prov_ecs_test
       - IN: e2eshipdemo-release-ecs-beta
       - IN: e2eshipdemo-params-ecs-test
       - IN: e2eshipdemo-cluster-ecs-test
@@ -57,7 +58,7 @@ jobs:
   - name: sit
     type: runCLI
     steps:
-      - IN: prov_ecs_test
+      - IN: e2eshipdemo-deploy-ecs-test
       - IN: sit_repo
       - IN: sit_params
       - TASK:
@@ -186,7 +187,7 @@ jobs:
   - name: de_prov_ecs_test
     type: runCLI
     steps:
-      - IN: prov_ecs_test
+      - IN: sit
         switch: off
       - IN: test_tf_state
       - IN: test_vpc_conf
